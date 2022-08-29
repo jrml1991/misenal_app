@@ -246,7 +246,7 @@ class _TrackingPageState extends State<TrackingPage>
                                     '1',
                                     'signal_tracker',
                                     frequency: const Duration(minutes: 15),
-                                    //initialDelay: const Duration(minutes: 15),
+                                    initialDelay: const Duration(minutes: 10),
                                   );
                                   await Wakelock.enabled;
                                 }

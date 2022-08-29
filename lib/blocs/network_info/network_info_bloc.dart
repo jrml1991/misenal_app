@@ -316,11 +316,11 @@ class NetworkInfoBloc extends Bloc<NetworkInfoEvent, NetworkInfoState> {
             network_iso: currentCellInFirstChip.wcdma!.network!.iso.toString(),
             network_mcc: currentCellInFirstChip.wcdma!.network!.mcc.toString(),
             network_mnc: currentCellInFirstChip.wcdma!.network!.mnc.toString(),
-            ci: currentCellInFirstChip.wcdma!.ci!.toString(),
-            lac: currentCellInFirstChip.wcdma!.lac!.toString(),
-            psc: currentCellInFirstChip.wcdma!.psc!.toString(),
-            rnc: currentCellInFirstChip.wcdma!.rnc!.toString(),
-            cid: currentCellInFirstChip.wcdma!.cid!.toString(),
+            ci: currentCellInFirstChip.wcdma!.ci.toString(),
+            lac: currentCellInFirstChip.wcdma!.lac.toString(),
+            psc: currentCellInFirstChip.wcdma!.psc.toString(),
+            rnc: currentCellInFirstChip.wcdma!.rnc.toString(),
+            cid: currentCellInFirstChip.wcdma!.cid.toString(),
           );
         } else if (currentCellInFirstChip.type == "GSM") {
           //3G
