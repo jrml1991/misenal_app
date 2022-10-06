@@ -87,8 +87,8 @@ class NetworkInfo extends Model {
     this.psc,
     this.rnc,
     this.operator_name,
-    this.isManual = "No",
-    this.background = "No",
+    this.isManual = "NO",
+    this.background = "NO",
     this.fechaCorta,
   }) : super(id);
 

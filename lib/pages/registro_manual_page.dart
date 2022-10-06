@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_internet_speed_test/flutter_internet_speed_test.dart';
+import 'package:misenal_app/helpers/helpers.dart';
+import 'package:misenal_app/widgets/forms/so_seleccion_multiple_field.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 import 'package:reactive_image_picker/image_file.dart';
 import 'package:misenal_app/blocs/blocs.dart';
@@ -7,8 +10,9 @@ import 'package:misenal_app/screens/screens.dart';
 import 'package:misenal_app/ui/app_styles.dart';
 import 'package:misenal_app/widgets/headers.dart';
 import 'package:misenal_app/widgets/widgets.dart';
+import 'package:syncfusion_flutter_gauges/gauges.dart';
 
-class RegistroManualPage extends StatelessWidget {
+class RegistroManualPage extends StatefulWidget {
   final String id;
   const RegistroManualPage({
     Key? key,
@@ -16,39 +20,113 @@ class RegistroManualPage extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<RegistroManualPage> createState() => _RegistroManualPageState();
+}
+
+class _RegistroManualPageState extends State<RegistroManualPage> {
+  late SpeedTestBloc speedBloc;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    speedBloc = BlocProvider.of<SpeedTestBloc>(context);
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final estructura = <String, AbstractControl<dynamic>>{};
+    final valores = {
+      "Llamadas": FormControl<bool>(value: false),
+      "SMS": FormControl<bool>(value: false),
+      "Navegacion": FormControl<bool>(value: false)
+    };
+
+    estructura.addEntries(valores.entries);
+
+    final estructura2 = <String, AbstractControl<dynamic>>{};
+    final valores2 = {
+      "Lentitud": FormControl<bool>(value: false),
+      "Inestabilidad": FormControl<bool>(value: false),
+      "Sin señal general": FormControl<bool>(value: false),
+      "Falla sin energia": FormControl<bool>(value: false)
+    };
+
+    estructura2.addEntries(valores2.entries);
+
     final form = FormGroup({
-      'Id': FormControl(
+      'idLectura': FormControl<String>(
         validators: [
           Validators.required,
         ],
-        value: id,
+        value: widget.id,
       ),
-      'Zona': FormControl<String>(
-        validators: [
-          Validators.required,
-        ],
-      ),
-      'Ambiente': FormControl<String>(
+      'departamento': FormControl<String>(
         validators: [
           Validators.required,
         ],
       ),
-      'Tipo Ambiente': FormControl<String>(
+      'municipio': FormControl<String>(
         validators: [
           Validators.required,
         ],
       ),
-      'Comentarios': FormControl<String>(
+      'zona': FormControl<String>(
         validators: [
           Validators.required,
         ],
       ),
-      'Fotografia': FormControl<ImageFile>(
+      'ambiente': FormControl<String>(
         validators: [
           Validators.required,
         ],
       ),
+      'tipoAmbiente': FormControl<String>(
+        validators: [
+          Validators.required,
+        ],
+      ),
+      'descripcionAmbiente': FormControl<String>(
+        validators: [
+          Validators.required,
+        ],
+      ),
+      'comentario': FormControl<String>(
+        validators: [
+          Validators.required,
+        ],
+      ),
+      'colonia': FormControl<String>(
+        validators: [
+          Validators.required,
+        ],
+      ),
+      'fallaDesde': FormControl<DateTime>(
+        value: DateTime.now(),
+        validators: [
+          Validators.required,
+        ],
+      ),
+      'horas': FormControl<RangeValues>(
+        value: const RangeValues(
+          0,
+          24,
+        ),
+      ),
+      'tipoAfectacion': FormArray(
+        [FormGroup(estructura)],
+      ),
+      'afectacion': FormArray(
+        [FormGroup(estructura2)],
+      ),
+      'fotografia': FormControl<ImageFile>(),
+      'navegacionActiva': FormControl<String>(
+        validators: [
+          Validators.required,
+        ],
+      ),
+      'mbBajada': FormControl<double>(),
+      'mbSubida': FormControl<double>(),
     });
 
     Future openDialog() => showDialog(
@@ -123,38 +201,491 @@ class RegistroManualPage extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: <Widget>[
                               SOSeleccionUnicaField(
-                                campo: "Zona",
-                                listaValores: "Rural,Urbana",
+                                campo: "departamento",
+                                label: "Departamento",
+                                listaValores: departamentos.join(","),
+                                form: form,
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              ReactiveValueListenableBuilder<String>(
+                                  formControlName: 'departamento',
+                                  builder: (context, departamento, child) {
+                                    return SOSeleccionUnicaField(
+                                      campo: "municipio",
+                                      label: "Municipio",
+                                      listaValores: [
+                                        ...municipios
+                                            .where((mun) {
+                                              return mun.departamento ==
+                                                  departamento.value.toString();
+                                            })
+                                            .toList()
+                                            .map((elemento) =>
+                                                elemento.municipio)
+                                      ].join(","),
+                                      form: form,
+                                    );
+                                  }),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              const SOTextField(
+                                campo: "colonia",
+                                label: "Colonia",
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              SOSeleccionUnicaField(
+                                campo: "zona",
+                                label: "Zona",
+                                listaValores: "RURAL,URBANA",
                                 form: form,
                               ),
                               const SizedBox(
                                 height: 10,
                               ),
                               SOSeleccionUnicaField(
-                                campo: "Ambiente",
-                                listaValores: "Interior,Exterior",
+                                campo: "ambiente",
+                                label: "Ambiente",
+                                listaValores: "INTERIOR,EXTERIOR",
                                 form: form,
                               ),
                               const SizedBox(
                                 height: 10,
                               ),
                               SOSeleccionUnicaField(
-                                campo: "Tipo Ambiente",
+                                campo: "tipoAmbiente",
+                                label: "Tipo Ambiente",
                                 listaValores:
-                                    "Parque,Montaña,Calle,Casa,Edificio",
+                                    "CALLE,CASA,EDIFICIO,MONTAÑA,PARQUE",
                                 form: form,
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              ReactiveValueListenableBuilder<String>(
+                                  formControlName: 'tipoAmbiente',
+                                  builder: (context, tipo, child) {
+                                    return SOSeleccionUnicaField(
+                                      campo: "descripcionAmbiente",
+                                      label: "Descripción del Ambiente",
+                                      listaValores: [
+                                        ...ambientes
+                                            .where((amb) {
+                                              return amb.tipo ==
+                                                  tipo.value.toString();
+                                            })
+                                            .toList()
+                                            .map((elemento) =>
+                                                elemento.descripcion)
+                                      ].join(","),
+                                      form: form,
+                                    );
+                                  }),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              SODateField(
+                                lastDate: DateTime.now(),
+                                campo: "fallaDesde",
+                                label: "¿Desde cuándo presenta la falla?",
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              const SORangeField(
+                                campo: "horas",
+                                label: "Horas con falla",
+                                min: 0.0,
+                                max: 24.0,
+                                divisions: 24,
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              SOSeleccionMultipleField(
+                                campo: "tipoAfectacion",
+                                label: "Tipo de afectación presentada",
+                                listaValores: 'Llamadas,Navegacion,SMS',
+                                formGroup: formulario,
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              SOSeleccionMultipleField(
+                                campo: "afectacion",
+                                label: "Afectación presentada",
+                                listaValores:
+                                    'Lentitud,Inestabilidad,Sin señal general,Falla sin energia',
+                                formGroup: formulario,
                               ),
                               const SizedBox(
                                 height: 10,
                               ),
                               const SOTextFieldMultiline(
-                                campo: "Comentarios",
+                                campo: "comentario",
+                                label: "Comentarios Adicionales",
                               ),
                               const SizedBox(
                                 height: 10,
                               ),
+                              SOSeleccionUnicaField(
+                                campo: "navegacionActiva",
+                                label: "¿Tiene algún paquetede datos Activo?",
+                                listaValores: "SI,NO",
+                                form: form,
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              ReactiveValueListenableBuilder<String>(
+                                  formControlName: 'navegacionActiva',
+                                  builder: (context, tipo, child) {
+                                    if (tipo.value == "SI") {
+                                      return Column(
+                                        children: [
+                                          Stack(
+                                            children: [
+                                              BlocBuilder<SpeedTestBloc,
+                                                  SpeedTestState>(
+                                                builder: (context, state) {
+                                                  return SfRadialGauge(
+                                                    axes: <RadialAxis>[
+                                                      RadialAxis(
+                                                        minimum: 0,
+                                                        maximum: 100,
+                                                        axisLineStyle:
+                                                            const AxisLineStyle(
+                                                          color: kThirdColor,
+                                                        ),
+                                                        axisLabelStyle:
+                                                            const GaugeTextStyle(
+                                                                color:
+                                                                    kSecondaryColor,
+                                                                fontFamily:
+                                                                    'CronosLPro'),
+                                                        ranges: <GaugeRange>[
+                                                          GaugeRange(
+                                                            startValue: 0,
+                                                            endValue: 100,
+                                                            color:
+                                                                kPrimaryColor,
+                                                            startWidth: 10,
+                                                            endWidth: 20,
+                                                          ),
+                                                        ],
+                                                        pointers: <
+                                                            GaugePointer>[
+                                                          NeedlePointer(
+                                                            value: state.tipo ==
+                                                                    "BAJADA"
+                                                                ? state.download
+                                                                : state.upload,
+                                                            needleColor:
+                                                                kSecondaryColor,
+                                                            enableAnimation:
+                                                                true,
+                                                            knobStyle:
+                                                                const KnobStyle(
+                                                              color:
+                                                                  kSecondaryColor,
+                                                            ),
+                                                          )
+                                                        ],
+                                                        annotations: <
+                                                            GaugeAnnotation>[
+                                                          GaugeAnnotation(
+                                                            widget: Container(
+                                                              child: Column(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .center,
+                                                                children: [
+                                                                  Row(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .center,
+                                                                    children: [
+                                                                      Text(
+                                                                        state.tipo ==
+                                                                                'BAJADA'
+                                                                            ? state.download.toStringAsFixed(2)
+                                                                            : state.upload.toStringAsFixed(2),
+                                                                        style:
+                                                                            const TextStyle(
+                                                                          fontSize:
+                                                                              30,
+                                                                          fontFamily:
+                                                                              'CronosSPro',
+                                                                          color:
+                                                                              kSecondaryColor,
+                                                                        ),
+                                                                      ),
+                                                                      const Text(
+                                                                        'Mbps',
+                                                                        style:
+                                                                            TextStyle(
+                                                                          fontSize:
+                                                                              24,
+                                                                          fontFamily:
+                                                                              'CronosLPro',
+                                                                          color:
+                                                                              kSecondaryColor,
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                  Column(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .center,
+                                                                    children: [
+                                                                      Text(
+                                                                        state
+                                                                            .tipo,
+                                                                        style:
+                                                                            const TextStyle(
+                                                                          fontSize:
+                                                                              18,
+                                                                          fontFamily:
+                                                                              'CronosLPro',
+                                                                          color:
+                                                                              kPrimaryColor,
+                                                                        ),
+                                                                      ),
+                                                                      Text(
+                                                                        '${state.mensaje}',
+                                                                        style:
+                                                                            const TextStyle(
+                                                                          fontSize:
+                                                                              18,
+                                                                          fontFamily:
+                                                                              'CronosSPro',
+                                                                          color:
+                                                                              kPrimaryColor,
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                            angle: 90,
+                                                            positionFactor: 0.8,
+                                                          )
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  );
+                                                },
+                                              ),
+                                              Positioned(
+                                                top: 100,
+                                                left: (MediaQuery.of(context)
+                                                            .size
+                                                            .width /
+                                                        2) -
+                                                    98,
+                                                child: BlocBuilder<
+                                                    SpeedTestBloc,
+                                                    SpeedTestState>(
+                                                  builder: (context, state) {
+                                                    return Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: [
+                                                        state.ejecutando
+                                                            ? Container()
+                                                            : Column(
+                                                                children: [
+                                                                  const Icon(
+                                                                    Icons
+                                                                        .download_outlined,
+                                                                    size: 22,
+                                                                    color:
+                                                                        kThirdColor,
+                                                                  ),
+                                                                  Text(
+                                                                    "${state.download.toStringAsFixed(1)}Mbps",
+                                                                    style:
+                                                                        const TextStyle(
+                                                                      fontFamily:
+                                                                          'CronosLPro',
+                                                                      fontSize:
+                                                                          16,
+                                                                      color:
+                                                                          kSecondaryColor,
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                        const SizedBox(
+                                                          width: 20,
+                                                        ),
+                                                        state.ejecutando
+                                                            ? Container()
+                                                            : Column(
+                                                                children: [
+                                                                  const Icon(
+                                                                    Icons
+                                                                        .upload_outlined,
+                                                                    size: 22,
+                                                                    color:
+                                                                        kThirdColor,
+                                                                  ),
+                                                                  Text(
+                                                                    "${state.upload.toStringAsFixed(1)}Mbps",
+                                                                    style:
+                                                                        const TextStyle(
+                                                                      fontFamily:
+                                                                          'CronosLPro',
+                                                                      fontSize:
+                                                                          16,
+                                                                      color:
+                                                                          kSecondaryColor,
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              )
+                                                      ],
+                                                    );
+                                                  },
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                          const Text(
+                                            "¿Realizar Test de Velocidad?",
+                                            style: TextStyle(
+                                              color: kSecondaryColor,
+                                              fontSize: 16,
+                                              fontFamily: 'CronosLPro',
+                                            ),
+                                          ),
+                                          BlocBuilder<SpeedTestBloc,
+                                              SpeedTestState>(
+                                            builder: (context, state) {
+                                              return MaterialButton(
+                                                elevation: 4,
+                                                color: Colors.white,
+                                                onPressed: state.ejecutando
+                                                    ? null
+                                                    : () async {
+                                                        final internetSpeedTest =
+                                                            FlutterInternetSpeedTest();
+
+                                                        final started =
+                                                            await internetSpeedTest
+                                                                .startTesting(
+                                                          uploadTestServer:
+                                                              'http://speedtest.tele2.net/upload.php',
+                                                          downloadTestServer:
+                                                              'https://freetestdata.com/wp-content/uploads/2021/09/Free_Test_Data_1MB_PDF.pdf',
+                                                          onDone: (TestResult
+                                                                  download,
+                                                              TestResult
+                                                                  upload) {
+                                                            speedBloc.add(
+                                                                OnIniciarSpeedTest(
+                                                              download: download
+                                                                  .transferRate,
+                                                              upload: upload
+                                                                  .transferRate,
+                                                              mensaje:
+                                                                  "100% completado",
+                                                              tipo: "BAJADA",
+                                                              ejecutando: false,
+                                                            ));
+
+                                                            formulario
+                                                                    .controls[
+                                                                        'mbSubida']!
+                                                                    .value =
+                                                                upload
+                                                                    .transferRate;
+
+                                                            formulario
+                                                                    .controls[
+                                                                        'mbBajada']!
+                                                                    .value =
+                                                                download
+                                                                    .transferRate;
+                                                          },
+                                                          onProgress: (double
+                                                                  percent,
+                                                              TestResult data) {
+                                                            speedBloc.add(
+                                                                OnIniciarSpeedTest(
+                                                              download: data
+                                                                          .type ==
+                                                                      TestType
+                                                                          .DOWNLOAD
+                                                                  ? data
+                                                                      .transferRate
+                                                                  : 0,
+                                                              upload: data.type ==
+                                                                      TestType
+                                                                          .UPLOAD
+                                                                  ? data
+                                                                      .transferRate
+                                                                  : 0,
+                                                              mensaje:
+                                                                  "${percent.toStringAsFixed(1)}% completado.",
+                                                              tipo: data.type ==
+                                                                      TestType
+                                                                          .UPLOAD
+                                                                  ? "SUBIDA"
+                                                                  : "BAJADA",
+                                                              ejecutando: true,
+                                                            ));
+                                                          },
+                                                          onError: (String
+                                                                  errorMessage,
+                                                              String
+                                                                  speedTestError) {
+                                                            print(
+                                                                "ERRROR:::$errorMessage");
+                                                            print(
+                                                                "ERRROR:::$speedTestError");
+                                                            speedBloc.add(
+                                                                const OnIniciarSpeedTest(
+                                                              download: 0,
+                                                              upload: 0,
+                                                              mensaje:
+                                                                  "Ocurrió un erro al consultar los datos",
+                                                              tipo: "Descarga",
+                                                              ejecutando: false,
+                                                            ));
+                                                          },
+                                                        );
+                                                      },
+                                                child: const Text(
+                                                  "Iniciar",
+                                                  style: TextStyle(
+                                                    color: kPrimaryColor,
+                                                    fontFamily: 'CronosLPro',
+                                                    fontSize: 16,
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                          ),
+                                        ],
+                                      );
+                                    } else {
+                                      return Container();
+                                    }
+                                  }),
+                              const SizedBox(
+                                height: 10,
+                              ),
                               const SOPhotoField(
-                                campo: "Fotografia",
+                                campo: "fotografia",
+                                label: "Fotografía",
                               ),
                               Row(
                                 mainAxisAlignment:
@@ -164,7 +695,7 @@ class RegistroManualPage extends StatelessWidget {
                                     child: ReactiveFormConsumer(
                                         builder: (context, form, child) {
                                       return SORoundedButton(
-                                        label: "Guardar",
+                                        label: "Enviar",
                                         funcion: !form.valid
                                             ? () {
                                                 form.markAllAsTouched();
@@ -179,7 +710,8 @@ class RegistroManualPage extends StatelessWidget {
                                                     .guardarMarcacionManual(
                                                   formulario: form,
                                                 );
-                                                openDialog();
+                                                openDialog().then((value) =>
+                                                    Navigator.pop(context));
                                               },
                                       );
                                     }),

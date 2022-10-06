@@ -9,9 +9,11 @@ import 'package:cell_info/models/common/cell_type.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 import 'package:reactive_image_picker/image_file.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -323,7 +325,7 @@ class NetworkInfoBloc extends Bloc<NetworkInfoEvent, NetworkInfoState> {
             cid: currentCellInFirstChip.wcdma!.cid.toString(),
           );
         } else if (currentCellInFirstChip.type == "GSM") {
-          //3G
+          //2g
           celda = CeldaInfo(
             tipo: currentCellInFirstChip.type,
             dbm: currentCellInFirstChip.gsm!.signalGSM!.dbm.toString(),
@@ -423,21 +425,63 @@ class NetworkInfoBloc extends Bloc<NetworkInfoEvent, NetworkInfoState> {
   }
 
   Future<bool> guardarMarcacionManual({required FormGroup formulario}) async {
-    final imageFile =
-        File((formulario.control('Fotografia').value as ImageFile).image!.path);
+    String imagen = "";
+    if (formulario.control('fotografia').value != null) {
+      final imageFile = File(
+          (formulario.control('fotografia').value as ImageFile).image!.path);
 
-    Uint8List imagebytes = await imageFile.readAsBytes(); //convert to bytes
-    final imagen = base64.encode(imagebytes);
+      Uint8List imagebytes = await imageFile.readAsBytes(); //convert to bytes
+      imagen = base64.encode(imagebytes);
+    }
+
+    //guardar campos de seleccion multiple.
+    final respTipoAfectacion =
+        (formulario.controls["tipoAfectacion"]!.value as List);
+    final respuestaTipoAfectacionMap = (respTipoAfectacion[0] as Map);
+
+    final tipoAfectaciones = <String>[];
+
+    for (var i = 0; i < respuestaTipoAfectacionMap.keys.length; i++) {
+      if (respuestaTipoAfectacionMap[
+              respuestaTipoAfectacionMap.keys.elementAt(i)] ==
+          true) {
+        tipoAfectaciones.add(respuestaTipoAfectacionMap.keys.elementAt(i));
+      }
+    }
+
+    final respAfectacion = (formulario.controls["afectacion"]!.value as List);
+    final respuestaAfectacionMap = (respAfectacion[0] as Map);
+
+    final afectaciones = <String>[];
+
+    for (var i = 0; i < respuestaAfectacionMap.keys.length; i++) {
+      if (respuestaAfectacionMap[respuestaAfectacionMap.keys.elementAt(i)] ==
+          true) {
+        afectaciones.add(respuestaAfectacionMap.keys.elementAt(i));
+      }
+    }
+
+    //fin de guardar campos de seleccion multiple
 
     final informacion = ManualNetworkInfo(
-      id_lectura: formulario.control('Id').value,
-      zona: formulario.control('Zona').value,
-      ambiente: formulario.control('Ambiente').value,
-      tipoAmbiente: formulario.control('Tipo Ambiente').value,
-      comentarios: formulario.control('Comentarios').value,
-      descripcionAmbiente: "No implementado",
+      idLectura: formulario.control('idLectura').value,
+      zona: formulario.control('zona').value,
+      departamento: formulario.control('departamento').value,
+      municipio: formulario.control('municipio').value,
+      ambiente: formulario.control('ambiente').value,
+      tipoAmbiente: formulario.control('tipoAmbiente').value.toString(),
+      descripcionAmbiente: formulario.control('descripcionAmbiente').value,
+      comentarios: formulario.control('comentario').value,
+      colonia: formulario.control('colonia').value,
+      fallaDesde: formulario.control('fallaDesde').value,
+      horas:
+          "${formulario.control('horas').value.start.round()}-${formulario.control('horas').value.end.round()}",
+      tipoAfectacion: tipoAfectaciones.join(","),
+      afectacion: afectaciones.join(","),
       fotografia: imagen,
       enviado: "No",
+      mbBajada: formulario.control('mbBajada').value,
+      mbSubida: formulario.control('mbSubida').value,
     );
 
     //guardar información localmente
@@ -446,6 +490,10 @@ class NetworkInfoBloc extends Bloc<NetworkInfoEvent, NetworkInfoState> {
       mensaje: "Guardando localmente...",
     ));
     await db.addInformacionManual(informacion);
+    final lectura =
+        await db.getInformacionPorLectura(informacion.idLectura.toString());
+    await db.updateInformacion(lectura[0].copyWith(isManual: 'SI'));
+
     add(const OnGuardandoEvent(
       guardando: false,
       mensaje: "Guardado localmente.",
@@ -473,14 +521,23 @@ class NetworkInfoBloc extends Bloc<NetworkInfoEvent, NetworkInfoState> {
       try {
         if (info.enviado == 'No') {
           final data = {
-            'id': info.id_lectura.toString(),
+            'id': info.idLectura.toString(),
             'tipo_marcacion_manual': "No soportado",
             'zona': info.zona.toString(),
             'ambiente': info.ambiente.toString(),
             'tipo_ambiente': info.tipoAmbiente.toString(),
             'descr_ambiente': info.descripcionAmbiente.toString(),
             'comentarios': info.comentarios.toString(),
+            'departamento': info.departamento.toString(),
+            'municipio': info.municipio.toString(),
+            'colonia_barrio': info.colonia.toString(),
+            'falla_desde': info.fallaDesde.toString(),
+            'tipo_afectacion': info.tipoAfectacion.toString(),
+            'afectacion': info.afectacion.toString(),
+            'rango_horas': info.horas.toString(),
             'foto': info.fotografia.toString(),
+            'mb_bajada': info.mbBajada,
+            'mb_subida': info.mbSubida,
           };
 
           final resp = await http
@@ -493,12 +550,15 @@ class NetworkInfoBloc extends Bloc<NetworkInfoEvent, NetworkInfoState> {
               .timeout(const Duration(seconds: 15));
 
           if (resp.statusCode == 200) {
-            await db.updateInformacionManual(info.copyWith(enviado: 'Si'));
+            print("RESPUESTA DEL API" + resp.body);
+            await db.updateInformacionManual(info.copyWith(enviado: 'SI'));
           }
         }
       } on TimeoutException catch (_) {
+        print("HA COCURRIDO UN RRROR AL ENVIAR MANUAL");
         return;
       } catch (e) {
+        print("HA COCURRIDO UN RRROR AL ENVIAR MANUAL" + e.toString());
         return;
       }
     }

@@ -24,10 +24,13 @@ class CustomInputText extends StatelessWidget {
     return Expanded(
       child: ReactiveTextField(
         formControlName: ctrlName,
-        validationMessages: (control) => {
-          ValidationMessage.required: 'Ingrese su número de telefono',
-          ValidationMessage.maxLength: 'Ingrese un número de telefono válido',
-          ValidationMessage.minLength: 'Ingrese un número de telefono válido',
+        validationMessages: {
+          ValidationMessage.required: (error) =>
+              'Ingrese su número de telefono',
+          ValidationMessage.maxLength: (error) =>
+              'Ingrese un número de telefono válido',
+          ValidationMessage.minLength: (error) =>
+              'Ingrese un número de telefono válido',
         },
         maxLength: 8,
         keyboardType: TextInputType.number,

@@ -1,3 +1,6 @@
+export 'package:misenal_app/widgets/forms/so_date_field.dart';
+export 'package:misenal_app/widgets/forms/so_range_field.dart';
+export 'package:misenal_app/widgets/forms/so_text_field.dart';
 export 'package:misenal_app/widgets/so_icon_label.dart';
 export 'package:misenal_app/widgets/so_blue_icon_card.dart';
 export 'package:misenal_app/widgets/forms/so_rounded_button.dart';

@@ -59,15 +59,7 @@ class _ProcessingScreenState extends State<ProcessingScreen>
         borderRadius: const BorderRadius.all(
           Radius.circular(10),
         ),
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            kSecondaryColor.withOpacity(0.9),
-            kSecondaryColor.withOpacity(0.6),
-            kPrimaryColor.withOpacity(0.6),
-          ],
-        ),
+        color: Colors.white.withOpacity(0.95),
       ),
       child: BlocBuilder<NetworkInfoBloc, NetworkInfoState>(
         builder: (context, state) {

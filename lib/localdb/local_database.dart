@@ -89,14 +89,23 @@ class LocalDatabase {
         """
               CREATE TABLE manualnetworkinfo (
                                     id $idType,
-                                    id_lectura $textType,
+                                    idLectura $textType,
+                                    departamento $stringType,
+                                    municipio $stringType,
                                     zona $stringType,
                                     ambiente $stringType,
                                     tipoAmbiente $stringType,
                                     descripcionAmbiente $stringType,
                                     comentarios $stringType,
+                                    colonia $stringType,
+                                    fallaDesde $stringType,
+                                    horas $stringType,
+                                    tipoAfectacion $stringType,
+                                    afectacion $stringType,
                                     fotografia $textType,
-                                    enviado $stringType
+                                    enviado $stringType,
+                                    mbSubida $realType,
+                                    mbBajada $realType
                                     )
             """;
 

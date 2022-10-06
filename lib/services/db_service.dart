@@ -14,12 +14,24 @@ class DBService {
     return networkInfo.map((item) => NetworkInfo.fromMap(item)).toList();
   }
 
+  Future<List<NetworkInfo>> getInformacionPorLectura(String idLectura) async {
+    await LocalDatabase.init();
+    final query =
+        """
+                    SELECT *
+                    FROM networkinfo
+                    WHERE id_lectura = '$idLectura' 
+                  """;
+
+    List<Map<String, dynamic>> networkInfo =
+        await LocalDatabase.customQuery(query);
+    return networkInfo.map((item) => NetworkInfo.fromMap(item)).toList();
+  }
+
   Future<List<int>> getInformacionDia() async {
     await LocalDatabase.init();
 
     String hoy = DateFormat.yMd().format(DateTime.now());
-    print("HOOOOYYYYY");
-    print(hoy);
 
     final query =
         """

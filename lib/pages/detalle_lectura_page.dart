@@ -109,7 +109,7 @@ class _DetalleLecturaPageState extends State<DetalleLecturaPage>
       ),
       child: ListView.builder(
         controller: scrollController,
-        itemCount: 25,
+        itemCount: 26,
         scrollDirection: Axis.vertical,
         itemBuilder: (BuildContext context, int index) {
           widget.animationController.forward();
@@ -253,7 +253,10 @@ class _DetalleLecturaPageState extends State<DetalleLecturaPage>
                 value: info.enviado!,
               );
             case 24:
-              return Container();
+              return InfoElementList(
+                label: "Reportado:",
+                value: info.isManual!,
+              );
             /*return InfoElementList(
                 label: "Fecha Corta:",
                 value: info.fechaCorta!,

@@ -8,52 +8,89 @@ String manualNetworkInfoToJson(ManualNetworkInfo data) =>
 
 class ManualNetworkInfo extends Model {
   static String table = 'manualnetworkinfo';
-  String? id_lectura;
+  String? idLectura;
+  String? departamento;
+  String? municipio;
   String? zona;
   String? ambiente;
   String? tipoAmbiente;
   String? descripcionAmbiente;
   String? comentarios;
+  String? colonia;
+  DateTime? fallaDesde;
+  String? horas;
+  String? tipoAfectacion;
+  String? afectacion;
   String? fotografia;
   String? enviado;
+  double? mbSubida;
+  double? mbBajada;
 
   ManualNetworkInfo({
     id,
-    this.id_lectura,
+    this.idLectura,
+    this.departamento,
+    this.municipio,
     this.zona,
     this.ambiente,
     this.tipoAmbiente,
     this.descripcionAmbiente,
     this.comentarios,
+    this.colonia,
+    this.fallaDesde,
+    this.horas,
+    this.tipoAfectacion,
+    this.afectacion,
     this.fotografia,
     this.enviado,
+    this.mbBajada,
+    this.mbSubida,
   }) : super(id);
 
   static ManualNetworkInfo fromMap(Map<String, dynamic> json) {
     return ManualNetworkInfo(
       id: json['id'],
-      id_lectura: json['id_lectura'].toString(),
+      idLectura: json['idLectura'].toString(),
+      departamento: json['departamento'].toString(),
+      municipio: json['municipio'].toString(),
       zona: json['zona'].toString(),
-      ambiente: json['tipoAmbiente'].toString(),
-      tipoAmbiente: json['modelo'].toString(),
+      ambiente: json['ambiente'].toString(),
+      tipoAmbiente: json['tipoAmbiente'].toString(),
       descripcionAmbiente: json['descripcionAmbiente'].toString(),
       comentarios: json['comentarios'].toString(),
+      colonia: json['colonia'].toString(),
+      fallaDesde: DateTime.parse(json['fallaDesde'].toString()),
+      horas: json['horas'].toString(),
+      tipoAfectacion: json['tipoAfectacion'].toString(),
+      afectacion: json['afectacion'].toString(),
       fotografia: json['fotografia'].toString(),
       enviado: json['enviado'].toString(),
+      mbBajada: json['mbBajada'] ?? json['mbBajada'].toDouble(),
+      mbSubida: json['mbSubida'] ?? json['mbSubida'].toDouble(),
     );
   }
 
+  @override
   Map<String, dynamic> toJson() {
     Map<String, dynamic> map = {
       "id": id,
-      "id_lectura": id_lectura,
+      "idLectura": idLectura,
+      "departamento": departamento,
+      "municipio": municipio,
       "zona": zona,
       "ambiente": ambiente,
       "tipoAmbiente": tipoAmbiente,
       "descripcionAmbiente": descripcionAmbiente,
       "comentarios": comentarios,
+      "colonia": colonia,
+      "fallaDesde": fallaDesde!.toIso8601String(),
+      "horas": horas,
+      "tipoAfectacion": tipoAfectacion,
+      "afectacion": afectacion,
       "fotografia": fotografia,
       "enviado": enviado,
+      "mbBajada": mbBajada,
+      "mbSubida": mbSubida,
     };
 
     if (id != null) {
@@ -65,24 +102,42 @@ class ManualNetworkInfo extends Model {
 
   ManualNetworkInfo copyWith({
     int? id,
-    String? id_lectura,
+    String? idLectura,
+    String? departamento,
+    String? municipio,
     String? zona,
     String? ambiente,
     String? tipoAmbiente,
     String? descripcionAmbiente,
     String? comentarios,
+    String? colonia,
+    DateTime? fallaDesde,
+    String? horas,
+    String? tipoAfectacion,
+    String? afectacion,
     String? fotografia,
     String? enviado,
+    double? mbSubida,
+    double? mbBajada,
   }) =>
       ManualNetworkInfo(
         id: id ?? this.id,
-        id_lectura: id_lectura ?? this.id_lectura,
+        idLectura: idLectura ?? this.idLectura,
+        departamento: departamento ?? this.departamento,
+        municipio: municipio ?? this.municipio,
         zona: zona ?? this.zona,
         ambiente: ambiente ?? this.ambiente,
         tipoAmbiente: tipoAmbiente ?? this.tipoAmbiente,
         descripcionAmbiente: descripcionAmbiente ?? this.descripcionAmbiente,
         comentarios: comentarios ?? this.comentarios,
+        colonia: colonia ?? this.colonia,
+        fallaDesde: fallaDesde ?? this.fallaDesde,
+        horas: horas ?? this.horas,
+        tipoAfectacion: tipoAfectacion ?? this.tipoAfectacion,
+        afectacion: afectacion ?? this.afectacion,
         fotografia: fotografia ?? this.fotografia,
         enviado: enviado ?? this.enviado,
+        mbSubida: mbSubida ?? this.mbSubida,
+        mbBajada: mbBajada ?? this.mbBajada,
       );
 }

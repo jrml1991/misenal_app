@@ -5,26 +5,31 @@ import 'package:reactive_image_picker/reactive_image_picker.dart';
 
 class SOPhotoField extends StatelessWidget {
   final String campo;
+  final String label;
 
-  const SOPhotoField({Key? key, required this.campo}) : super(key: key);
+  const SOPhotoField({
+    Key? key,
+    required this.campo,
+    required this.label,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ReactiveImagePicker(
       formControlName: campo,
-      validationMessages: (control) => {
-        ValidationMessage.required: '$campo es requerido',
+      validationMessages: {
+        ValidationMessage.required: (error) => '$label es requerido',
       },
       decoration: InputDecoration(
         contentPadding: EdgeInsets.zero,
-        labelText: campo,
+        labelText: label,
         labelStyle: const TextStyle(
-          fontSize: 18,
+          fontSize: 16,
           fontFamily: 'CronosLPro',
           color: kSecondaryColor,
         ),
         floatingLabelStyle: const TextStyle(
-          fontSize: 18,
+          fontSize: 16,
           fontFamily: 'CronosSPro',
           color: kSecondaryColor,
         ),

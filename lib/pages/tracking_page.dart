@@ -240,7 +240,7 @@ class _TrackingPageState extends State<TrackingPage>
                                 } else {
                                   await Workmanager().initialize(
                                     callBackDispatcher,
-                                    isInDebugMode: true,
+                                    //isInDebugMode: true,
                                   );
                                   await Workmanager().registerPeriodicTask(
                                     '1',

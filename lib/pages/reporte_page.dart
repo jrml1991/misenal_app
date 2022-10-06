@@ -1,3 +1,6 @@
+import 'dart:ui';
+
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -116,108 +119,136 @@ class _ReportePageState extends State<ReportePage>
           scrollDirection: Axis.vertical,
           itemBuilder: (BuildContext context, int index) {
             widget.animationController?.forward();
-            return Container(
-              margin: const EdgeInsets.all(8),
-              decoration: const BoxDecoration(
-                color: kPrimaryColor,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(8.0),
-                  bottomLeft: Radius.circular(8.0),
-                  bottomRight: Radius.circular(28.0),
-                  topRight: Radius.circular(28.0),
+            return GestureDetector(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => DetalleLecturaPage(
+                        informacion: informacion[index],
+                        animationController: widget.animationController!,
+                      ),
+                    ));
+              },
+              child: Container(
+                margin: const EdgeInsets.all(8),
+                decoration: const BoxDecoration(
+                  color: kPrimaryColor,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(8.0),
+                    bottomLeft: Radius.circular(8.0),
+                    bottomRight: Radius.circular(28.0),
+                    topRight: Radius.circular(28.0),
+                  ),
+                  boxShadow: <BoxShadow>[
+                    BoxShadow(
+                      color: kSecondaryColor,
+                      offset: Offset(1.1, 1.1),
+                      blurRadius: 5.0,
+                    ),
+                  ],
                 ),
-                boxShadow: <BoxShadow>[
-                  BoxShadow(
-                    color: kSecondaryColor,
-                    offset: Offset(1.1, 1.1),
-                    blurRadius: 5.0,
-                  ),
-                ],
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding:
-                            const EdgeInsets.only(top: 10, left: 16, right: 16),
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.calendar_month_rounded,
-                              color: Colors.white.withOpacity(0.8),
-                            ),
-                            const Text(
-                              " Fecha: ",
-                              style: TextStyle(
-                                color: kSecondaryColor,
-                                fontFamily: 'CronosSPro',
-                                fontSize: 16,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              top: 10, left: 16, right: 16),
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.calendar_month_rounded,
+                                color: Colors.white.withOpacity(0.8),
                               ),
-                            ),
-                            Text(
-                              "${DateFormat.yMMMEd('es_ES').format(informacion[index].fecha!)} ${DateFormat.Hms('es_ES').format(informacion[index].fecha!)}",
-                              style: const TextStyle(
-                                color: kSecondaryColor,
-                                fontFamily: 'CronosLPro',
-                                fontSize: 16,
+                              const Text(
+                                " Fecha: ",
+                                style: TextStyle(
+                                  color: kSecondaryColor,
+                                  fontFamily: 'CronosSPro',
+                                  fontSize: 16,
+                                ),
                               ),
-                            ),
-                          ],
+                              Text(
+                                "${DateFormat.yMMMEd('es_ES').format(informacion[index].fecha!)} ${DateFormat.Hms('es_ES').format(informacion[index].fecha!)}",
+                                style: const TextStyle(
+                                  color: kSecondaryColor,
+                                  fontFamily: 'CronosLPro',
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            top: 10,
+                            left: 16,
+                            right: 16,
+                          ),
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.signal_cellular_alt_rounded,
+                                color: Colors.white.withOpacity(0.8),
+                              ),
+                              const Text(
+                                " Nivel de Señal: ",
+                                style: TextStyle(
+                                  color: kSecondaryColor,
+                                  fontFamily: 'CronosSPro',
+                                  fontSize: 16,
+                                ),
+                              ),
+                              Text(
+                                informacion[index].nivelSignal.toString(),
+                                style: const TextStyle(
+                                  color: kSecondaryColor,
+                                  fontFamily: 'CronosLPro',
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        )
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          informacion[index].isManual == "SI"
+                              ? const Icon(
+                                  Icons.edit_note,
+                                  color: kSecondaryColor,
+                                  size: 22,
+                                )
+                              : Container(),
+                          informacion[index].isManual == "SI"
+                              ? Divider()
+                              : Container(),
+                          informacion[index].enviado == "SI"
+                              ? const Icon(
+                                  Icons.check_circle,
+                                  color: kSecondaryColor,
+                                  size: 22,
+                                )
+                              : const Icon(
+                                  Icons.wifi_off_outlined,
+                                  color: kSecondaryColor,
+                                  size: 22,
+                                )
+                        ],
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          top: 10,
-                          left: 16,
-                          right: 16,
-                        ),
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.signal_cellular_alt_rounded,
-                              color: Colors.white.withOpacity(0.8),
-                            ),
-                            const Text(
-                              " Nivel de Señal: ",
-                              style: TextStyle(
-                                color: kSecondaryColor,
-                                fontFamily: 'CronosSPro',
-                                fontSize: 16,
-                              ),
-                            ),
-                            Text(
-                              informacion[index].nivelSignal.toString(),
-                              style: const TextStyle(
-                                color: kSecondaryColor,
-                                fontFamily: 'CronosLPro',
-                                fontSize: 16,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      )
-                    ],
-                  ),
-                  IconButton(
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => DetalleLecturaPage(
-                                informacion: informacion[index],
-                                animationController:
-                                    widget.animationController!,
-                              ),
-                            ));
-                      },
-                      icon: const Icon(Icons.arrow_forward_ios))
-                ],
+                    )
+                  ],
+                ),
               ),
             );
           },

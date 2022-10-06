@@ -4,16 +4,21 @@ import 'package:reactive_forms/reactive_forms.dart';
 
 class SOTextFieldMultiline extends StatelessWidget {
   final String campo;
+  final String label;
 
-  const SOTextFieldMultiline({Key? key, required this.campo}) : super(key: key);
+  const SOTextFieldMultiline({
+    Key? key,
+    required this.campo,
+    required this.label,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ReactiveTextField(
       clipBehavior: Clip.none,
       formControlName: campo,
-      validationMessages: (control) => {
-        ValidationMessage.required: '$campo es requerido',
+      validationMessages: {
+        ValidationMessage.required: (error) => '$label es requerido',
       },
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
@@ -35,14 +40,14 @@ class SOTextFieldMultiline extends StatelessWidget {
           borderRadius: BorderRadius.circular(7.0),
           borderSide: const BorderSide(color: kPrimaryColor, width: 2),
         ),
-        labelText: campo,
+        labelText: label,
         labelStyle: const TextStyle(
-          fontSize: 18,
+          fontSize: 16,
           color: kSecondaryColor,
           fontFamily: 'CronosLPro',
         ),
         floatingLabelStyle: const TextStyle(
-          fontSize: 18,
+          fontSize: 16,
           color: kSecondaryColor,
           fontFamily: 'CronosSPro',
         ),

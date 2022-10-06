@@ -16,6 +16,9 @@ Future<void> main() async {
     BlocProvider(
       create: (context) => NetworkInfoBloc(),
     ),
+    BlocProvider(
+      create: (context) => SpeedTestBloc(),
+    ),
   ], child: const MyApp()));
 }
 
