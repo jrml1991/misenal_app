@@ -581,10 +581,14 @@ class _RegistroManualPageState extends State<RegistroManualPage> {
                                                         final started =
                                                             await internetSpeedTest
                                                                 .startTesting(
+                                                          //fileSize: ,
                                                           uploadTestServer:
                                                               'http://speedtest.tele2.net/upload.php',
                                                           downloadTestServer:
-                                                              'https://freetestdata.com/wp-content/uploads/2021/09/Free_Test_Data_1MB_PDF.pdf',
+                                                              'https://ipv4.scaleway.testdebit.info:8080/10M.iso',
+                                                          //'https://so.tigo.com.hn/apex/r/boc/360/files/static/v234/Home_Comunicado.pdf',
+                                                          //'https://freetestdata.com/wp-content/uploads/2021/09/Free_Test_Data_1MB_PDF.pdf',
+                                                          //'http://ipv4.scaleway.testdebit.info/1M.iso',
                                                           onDone: (TestResult
                                                                   download,
                                                               TestResult
