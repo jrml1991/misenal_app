@@ -341,352 +341,353 @@ class _RegistroManualPageState extends State<RegistroManualPage> {
                               const SizedBox(
                                 height: 10,
                               ),
+                              //DESHABILITADO JOSUE.MARQUEZ
+                              /*
                               ReactiveValueListenableBuilder<String>(
-                                  formControlName: 'navegacionActiva',
-                                  builder: (context, tipo, child) {
-                                    if (tipo.value == "SI") {
-                                      return Column(
-                                        children: [
-                                          Stack(
-                                            children: [
-                                              BlocBuilder<SpeedTestBloc,
-                                                  SpeedTestState>(
-                                                builder: (context, state) {
-                                                  return SfRadialGauge(
-                                                    axes: <RadialAxis>[
-                                                      RadialAxis(
-                                                        minimum: 0,
-                                                        maximum: 100,
-                                                        axisLineStyle:
-                                                            const AxisLineStyle(
-                                                          color: kThirdColor,
-                                                        ),
-                                                        axisLabelStyle:
-                                                            const GaugeTextStyle(
-                                                                color:
-                                                                    kSecondaryColor,
-                                                                fontFamily:
-                                                                    'CronosLPro'),
-                                                        ranges: <GaugeRange>[
-                                                          GaugeRange(
-                                                            startValue: 0,
-                                                            endValue: 100,
-                                                            color:
-                                                                kPrimaryColor,
-                                                            startWidth: 10,
-                                                            endWidth: 20,
-                                                          ),
-                                                        ],
-                                                        pointers: <
-                                                            GaugePointer>[
-                                                          NeedlePointer(
-                                                            value: state.tipo ==
-                                                                    "BAJADA"
-                                                                ? state.download
-                                                                : state.upload,
-                                                            needleColor:
-                                                                kSecondaryColor,
-                                                            enableAnimation:
-                                                                true,
-                                                            knobStyle:
-                                                                const KnobStyle(
+                                formControlName: 'navegacionActiva',
+                                builder: (context, tipo, child) {
+                                  if (tipo.value == "SI") {
+                                    return Column(
+                                      children: [
+                                        Stack(
+                                          children: [
+                                            BlocBuilder<SpeedTestBloc,
+                                                SpeedTestState>(
+                                              builder: (context, state) {
+                                                return SfRadialGauge(
+                                                  axes: <RadialAxis>[
+                                                    RadialAxis(
+                                                      minimum: 0,
+                                                      maximum: 100,
+                                                      axisLineStyle:
+                                                          const AxisLineStyle(
+                                                        color: kThirdColor,
+                                                      ),
+                                                      axisLabelStyle:
+                                                          const GaugeTextStyle(
                                                               color:
                                                                   kSecondaryColor,
+                                                              fontFamily:
+                                                                  'CronosLPro'),
+                                                      ranges: <GaugeRange>[
+                                                        GaugeRange(
+                                                          startValue: 0,
+                                                          endValue: 100,
+                                                          color: kPrimaryColor,
+                                                          startWidth: 10,
+                                                          endWidth: 20,
+                                                        ),
+                                                      ],
+                                                      pointers: <GaugePointer>[
+                                                        NeedlePointer(
+                                                          value: state.tipo ==
+                                                                  "BAJADA"
+                                                              ? state.download
+                                                              : state.upload,
+                                                          needleColor:
+                                                              kSecondaryColor,
+                                                          enableAnimation: true,
+                                                          knobStyle:
+                                                              const KnobStyle(
+                                                            color:
+                                                                kSecondaryColor,
+                                                          ),
+                                                        )
+                                                      ],
+                                                      annotations: <
+                                                          GaugeAnnotation>[
+                                                        GaugeAnnotation(
+                                                          widget: Container(
+                                                            child: Column(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .center,
+                                                              children: [
+                                                                Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .center,
+                                                                  children: [
+                                                                    Text(
+                                                                      state.tipo ==
+                                                                              'BAJADA'
+                                                                          ? state.download.toStringAsFixed(
+                                                                              2)
+                                                                          : state
+                                                                              .upload
+                                                                              .toStringAsFixed(2),
+                                                                      style:
+                                                                          const TextStyle(
+                                                                        fontSize:
+                                                                            30,
+                                                                        fontFamily:
+                                                                            'CronosSPro',
+                                                                        color:
+                                                                            kSecondaryColor,
+                                                                      ),
+                                                                    ),
+                                                                    const Text(
+                                                                      'Mbps',
+                                                                      style:
+                                                                          TextStyle(
+                                                                        fontSize:
+                                                                            24,
+                                                                        fontFamily:
+                                                                            'CronosLPro',
+                                                                        color:
+                                                                            kSecondaryColor,
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                                Column(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .center,
+                                                                  children: [
+                                                                    Text(
+                                                                      state
+                                                                          .tipo,
+                                                                      style:
+                                                                          const TextStyle(
+                                                                        fontSize:
+                                                                            18,
+                                                                        fontFamily:
+                                                                            'CronosLPro',
+                                                                        color:
+                                                                            kPrimaryColor,
+                                                                      ),
+                                                                    ),
+                                                                    Text(
+                                                                      '${state.mensaje}',
+                                                                      style:
+                                                                          const TextStyle(
+                                                                        fontSize:
+                                                                            18,
+                                                                        fontFamily:
+                                                                            'CronosSPro',
+                                                                        color:
+                                                                            kPrimaryColor,
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ],
                                                             ),
-                                                          )
-                                                        ],
-                                                        annotations: <
-                                                            GaugeAnnotation>[
-                                                          GaugeAnnotation(
-                                                            widget: Container(
-                                                              child: Column(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .center,
-                                                                children: [
-                                                                  Row(
-                                                                    mainAxisAlignment:
-                                                                        MainAxisAlignment
-                                                                            .center,
-                                                                    children: [
-                                                                      Text(
-                                                                        state.tipo ==
-                                                                                'BAJADA'
-                                                                            ? state.download.toStringAsFixed(2)
-                                                                            : state.upload.toStringAsFixed(2),
-                                                                        style:
-                                                                            const TextStyle(
-                                                                          fontSize:
-                                                                              30,
-                                                                          fontFamily:
-                                                                              'CronosSPro',
-                                                                          color:
-                                                                              kSecondaryColor,
-                                                                        ),
-                                                                      ),
-                                                                      const Text(
-                                                                        'Mbps',
-                                                                        style:
-                                                                            TextStyle(
-                                                                          fontSize:
-                                                                              24,
-                                                                          fontFamily:
-                                                                              'CronosLPro',
-                                                                          color:
-                                                                              kSecondaryColor,
-                                                                        ),
-                                                                      ),
-                                                                    ],
+                                                          ),
+                                                          angle: 90,
+                                                          positionFactor: 0.8,
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ],
+                                                );
+                                              },
+                                            ),
+                                            Positioned(
+                                              top: 100,
+                                              left: (MediaQuery.of(context)
+                                                          .size
+                                                          .width /
+                                                      2) -
+                                                  98,
+                                              child: BlocBuilder<SpeedTestBloc,
+                                                  SpeedTestState>(
+                                                builder: (context, state) {
+                                                  return Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      state.ejecutando
+                                                          ? Container()
+                                                          : Column(
+                                                              children: [
+                                                                const Icon(
+                                                                  Icons
+                                                                      .download_outlined,
+                                                                  size: 22,
+                                                                  color:
+                                                                      kThirdColor,
+                                                                ),
+                                                                Text(
+                                                                  "${state.download.toStringAsFixed(1)}Mbps",
+                                                                  style:
+                                                                      const TextStyle(
+                                                                    fontFamily:
+                                                                        'CronosLPro',
+                                                                    fontSize:
+                                                                        16,
+                                                                    color:
+                                                                        kSecondaryColor,
                                                                   ),
-                                                                  Column(
-                                                                    mainAxisAlignment:
-                                                                        MainAxisAlignment
-                                                                            .center,
-                                                                    children: [
-                                                                      Text(
-                                                                        state
-                                                                            .tipo,
-                                                                        style:
-                                                                            const TextStyle(
-                                                                          fontSize:
-                                                                              18,
-                                                                          fontFamily:
-                                                                              'CronosLPro',
-                                                                          color:
-                                                                              kPrimaryColor,
-                                                                        ),
-                                                                      ),
-                                                                      Text(
-                                                                        '${state.mensaje}',
-                                                                        style:
-                                                                            const TextStyle(
-                                                                          fontSize:
-                                                                              18,
-                                                                          fontFamily:
-                                                                              'CronosSPro',
-                                                                          color:
-                                                                              kPrimaryColor,
-                                                                        ),
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                ],
-                                                              ),
+                                                                ),
+                                                              ],
                                                             ),
-                                                            angle: 90,
-                                                            positionFactor: 0.8,
-                                                          )
-                                                        ],
+                                                      const SizedBox(
+                                                        width: 20,
                                                       ),
+                                                      state.ejecutando
+                                                          ? Container()
+                                                          : Column(
+                                                              children: [
+                                                                const Icon(
+                                                                  Icons
+                                                                      .upload_outlined,
+                                                                  size: 22,
+                                                                  color:
+                                                                      kThirdColor,
+                                                                ),
+                                                                Text(
+                                                                  "${state.upload.toStringAsFixed(1)}Mbps",
+                                                                  style:
+                                                                      const TextStyle(
+                                                                    fontFamily:
+                                                                        'CronosLPro',
+                                                                    fontSize:
+                                                                        16,
+                                                                    color:
+                                                                        kSecondaryColor,
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            )
                                                     ],
                                                   );
                                                 },
                                               ),
-                                              Positioned(
-                                                top: 100,
-                                                left: (MediaQuery.of(context)
-                                                            .size
-                                                            .width /
-                                                        2) -
-                                                    98,
-                                                child: BlocBuilder<
-                                                    SpeedTestBloc,
-                                                    SpeedTestState>(
-                                                  builder: (context, state) {
-                                                    return Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceBetween,
-                                                      children: [
-                                                        state.ejecutando
-                                                            ? Container()
-                                                            : Column(
-                                                                children: [
-                                                                  const Icon(
-                                                                    Icons
-                                                                        .download_outlined,
-                                                                    size: 22,
-                                                                    color:
-                                                                        kThirdColor,
-                                                                  ),
-                                                                  Text(
-                                                                    "${state.download.toStringAsFixed(1)}Mbps",
-                                                                    style:
-                                                                        const TextStyle(
-                                                                      fontFamily:
-                                                                          'CronosLPro',
-                                                                      fontSize:
-                                                                          16,
-                                                                      color:
-                                                                          kSecondaryColor,
-                                                                    ),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                        const SizedBox(
-                                                          width: 20,
-                                                        ),
-                                                        state.ejecutando
-                                                            ? Container()
-                                                            : Column(
-                                                                children: [
-                                                                  const Icon(
-                                                                    Icons
-                                                                        .upload_outlined,
-                                                                    size: 22,
-                                                                    color:
-                                                                        kThirdColor,
-                                                                  ),
-                                                                  Text(
-                                                                    "${state.upload.toStringAsFixed(1)}Mbps",
-                                                                    style:
-                                                                        const TextStyle(
-                                                                      fontFamily:
-                                                                          'CronosLPro',
-                                                                      fontSize:
-                                                                          16,
-                                                                      color:
-                                                                          kSecondaryColor,
-                                                                    ),
-                                                                  ),
-                                                                ],
-                                                              )
-                                                      ],
-                                                    );
-                                                  },
+                                            )
+                                          ],
+                                        ),
+                                        const Text(
+                                          "¿Realizar Test de Velocidad?",
+                                          style: TextStyle(
+                                            color: kSecondaryColor,
+                                            fontSize: 16,
+                                            fontFamily: 'CronosLPro',
+                                          ),
+                                        ),
+                                        BlocBuilder<SpeedTestBloc,
+                                            SpeedTestState>(
+                                          builder: (context, state) {
+                                            return MaterialButton(
+                                              elevation: 4,
+                                              color: Colors.white,
+                                              onPressed: state.ejecutando
+                                                  ? null
+                                                  : () async {
+                                                      final internetSpeedTest =
+                                                          FlutterInternetSpeedTest();
+
+                                                      final started =
+                                                          await internetSpeedTest
+                                                              .startTesting(
+                                                        //fileSize: ,
+                                                        uploadTestServer:
+                                                            'http://speedtest.tele2.net/upload.php',
+                                                        downloadTestServer:
+                                                            'https://ipv4.scaleway.testdebit.info:8080/10M.iso',
+                                                        //'https://so.tigo.com.hn/apex/r/boc/360/files/static/v234/Home_Comunicado.pdf',
+                                                        //'https://freetestdata.com/wp-content/uploads/2021/09/Free_Test_Data_1MB_PDF.pdf',
+                                                        //'http://ipv4.scaleway.testdebit.info/1M.iso',
+                                                        onDone: (TestResult
+                                                                download,
+                                                            TestResult upload) {
+                                                          speedBloc.add(
+                                                              OnIniciarSpeedTest(
+                                                            download: download
+                                                                .transferRate,
+                                                            upload: upload
+                                                                .transferRate,
+                                                            mensaje:
+                                                                "100% completado",
+                                                            tipo: "BAJADA",
+                                                            ejecutando: false,
+                                                          ));
+
+                                                          formulario
+                                                                  .controls[
+                                                                      'mbSubida']!
+                                                                  .value =
+                                                              upload
+                                                                  .transferRate;
+
+                                                          formulario
+                                                                  .controls[
+                                                                      'mbBajada']!
+                                                                  .value =
+                                                              download
+                                                                  .transferRate;
+                                                        },
+                                                        onProgress: (double
+                                                                percent,
+                                                            TestResult data) {
+                                                          speedBloc.add(
+                                                              OnIniciarSpeedTest(
+                                                            download: data
+                                                                        .type ==
+                                                                    TestType
+                                                                        .DOWNLOAD
+                                                                ? data
+                                                                    .transferRate
+                                                                : 0,
+                                                            upload: data.type ==
+                                                                    TestType
+                                                                        .UPLOAD
+                                                                ? data
+                                                                    .transferRate
+                                                                : 0,
+                                                            mensaje:
+                                                                "${percent.toStringAsFixed(1)}% completado.",
+                                                            tipo: data.type ==
+                                                                    TestType
+                                                                        .UPLOAD
+                                                                ? "SUBIDA"
+                                                                : "BAJADA",
+                                                            ejecutando: true,
+                                                          ));
+                                                        },
+                                                        onError: (String
+                                                                errorMessage,
+                                                            String
+                                                                speedTestError) {
+                                                          print(
+                                                              "ERRROR:::$errorMessage");
+                                                          print(
+                                                              "ERRROR:::$speedTestError");
+                                                          speedBloc.add(
+                                                              const OnIniciarSpeedTest(
+                                                            download: 0,
+                                                            upload: 0,
+                                                            mensaje:
+                                                                "Ocurrió un erro al consultar los datos",
+                                                            tipo: "Descarga",
+                                                            ejecutando: false,
+                                                          ));
+                                                        },
+                                                      );
+                                                    },
+                                              child: const Text(
+                                                "Iniciar",
+                                                style: TextStyle(
+                                                  color: kPrimaryColor,
+                                                  fontFamily: 'CronosLPro',
+                                                  fontSize: 16,
                                                 ),
-                                              )
-                                            ],
-                                          ),
-                                          const Text(
-                                            "¿Realizar Test de Velocidad?",
-                                            style: TextStyle(
-                                              color: kSecondaryColor,
-                                              fontSize: 16,
-                                              fontFamily: 'CronosLPro',
-                                            ),
-                                          ),
-                                          BlocBuilder<SpeedTestBloc,
-                                              SpeedTestState>(
-                                            builder: (context, state) {
-                                              return MaterialButton(
-                                                elevation: 4,
-                                                color: Colors.white,
-                                                onPressed: state.ejecutando
-                                                    ? null
-                                                    : () async {
-                                                        final internetSpeedTest =
-                                                            FlutterInternetSpeedTest();
-
-                                                        final started =
-                                                            await internetSpeedTest
-                                                                .startTesting(
-                                                          //fileSize: ,
-                                                          uploadTestServer:
-                                                              'http://speedtest.tele2.net/upload.php',
-                                                          downloadTestServer:
-                                                              'https://ipv4.scaleway.testdebit.info:8080/10M.iso',
-                                                          //'https://so.tigo.com.hn/apex/r/boc/360/files/static/v234/Home_Comunicado.pdf',
-                                                          //'https://freetestdata.com/wp-content/uploads/2021/09/Free_Test_Data_1MB_PDF.pdf',
-                                                          //'http://ipv4.scaleway.testdebit.info/1M.iso',
-                                                          onDone: (TestResult
-                                                                  download,
-                                                              TestResult
-                                                                  upload) {
-                                                            speedBloc.add(
-                                                                OnIniciarSpeedTest(
-                                                              download: download
-                                                                  .transferRate,
-                                                              upload: upload
-                                                                  .transferRate,
-                                                              mensaje:
-                                                                  "100% completado",
-                                                              tipo: "BAJADA",
-                                                              ejecutando: false,
-                                                            ));
-
-                                                            formulario
-                                                                    .controls[
-                                                                        'mbSubida']!
-                                                                    .value =
-                                                                upload
-                                                                    .transferRate;
-
-                                                            formulario
-                                                                    .controls[
-                                                                        'mbBajada']!
-                                                                    .value =
-                                                                download
-                                                                    .transferRate;
-                                                          },
-                                                          onProgress: (double
-                                                                  percent,
-                                                              TestResult data) {
-                                                            speedBloc.add(
-                                                                OnIniciarSpeedTest(
-                                                              download: data
-                                                                          .type ==
-                                                                      TestType
-                                                                          .DOWNLOAD
-                                                                  ? data
-                                                                      .transferRate
-                                                                  : 0,
-                                                              upload: data.type ==
-                                                                      TestType
-                                                                          .UPLOAD
-                                                                  ? data
-                                                                      .transferRate
-                                                                  : 0,
-                                                              mensaje:
-                                                                  "${percent.toStringAsFixed(1)}% completado.",
-                                                              tipo: data.type ==
-                                                                      TestType
-                                                                          .UPLOAD
-                                                                  ? "SUBIDA"
-                                                                  : "BAJADA",
-                                                              ejecutando: true,
-                                                            ));
-                                                          },
-                                                          onError: (String
-                                                                  errorMessage,
-                                                              String
-                                                                  speedTestError) {
-                                                            print(
-                                                                "ERRROR:::$errorMessage");
-                                                            print(
-                                                                "ERRROR:::$speedTestError");
-                                                            speedBloc.add(
-                                                                const OnIniciarSpeedTest(
-                                                              download: 0,
-                                                              upload: 0,
-                                                              mensaje:
-                                                                  "Ocurrió un erro al consultar los datos",
-                                                              tipo: "Descarga",
-                                                              ejecutando: false,
-                                                            ));
-                                                          },
-                                                        );
-                                                      },
-                                                child: const Text(
-                                                  "Iniciar",
-                                                  style: TextStyle(
-                                                    color: kPrimaryColor,
-                                                    fontFamily: 'CronosLPro',
-                                                    fontSize: 16,
-                                                  ),
-                                                ),
-                                              );
-                                            },
-                                          ),
-                                        ],
-                                      );
-                                    } else {
-                                      return Container();
-                                    }
-                                  }),
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ],
+                                    );
+                                  } else {
+                                    return Container();
+                                  }
+                                },
+                              ),
                               const SizedBox(
                                 height: 10,
-                              ),
+                              ),*/
                               const SOPhotoField(
                                 campo: "fotografia",
                                 label: "Fotografía",

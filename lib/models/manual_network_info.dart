@@ -65,8 +65,8 @@ class ManualNetworkInfo extends Model {
       afectacion: json['afectacion'].toString(),
       fotografia: json['fotografia'].toString(),
       enviado: json['enviado'].toString(),
-      mbBajada: json['mbBajada'] ?? json['mbBajada'].toDouble(),
-      mbSubida: json['mbSubida'] ?? json['mbSubida'].toDouble(),
+      mbBajada: json['mbBajada'] == null ? 0 : json['mbBajada'].toDouble(),
+      mbSubida: json['mbSubida'] == null ? 0 : json['mbSubida'].toDouble(),
     );
   }
 
