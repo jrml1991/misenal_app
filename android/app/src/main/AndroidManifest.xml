@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.misenal_app">
+    package="com.so.misenal_app">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- Network Info -->
     <uses-permission android:name="android.permission.INTERNET" /> <!-- Network Info -->

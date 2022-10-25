@@ -1,4 +1,4 @@
-package com.example.misenal_app;
+package com.so.misenal_app;
 
 import io.flutter.embedding.android.FlutterActivity;
 
