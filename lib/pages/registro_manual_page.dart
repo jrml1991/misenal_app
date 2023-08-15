@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_internet_speed_test/flutter_internet_speed_test.dart';
-import 'package:misenal_app/helpers/helpers.dart';
-import 'package:misenal_app/widgets/forms/so_seleccion_multiple_field.dart';
-import 'package:reactive_forms/reactive_forms.dart';
-import 'package:reactive_image_picker/image_file.dart';
 import 'package:misenal_app/blocs/blocs.dart';
+import 'package:misenal_app/helpers/helpers.dart';
 import 'package:misenal_app/screens/screens.dart';
 import 'package:misenal_app/ui/app_styles.dart';
+import 'package:misenal_app/widgets/forms/so_seleccion_multiple_field.dart';
 import 'package:misenal_app/widgets/headers.dart';
 import 'package:misenal_app/widgets/widgets.dart';
-import 'package:syncfusion_flutter_gauges/gauges.dart';
+import 'package:reactive_forms/reactive_forms.dart';
+import 'package:reactive_image_picker/image_file.dart';
 
 class RegistroManualPage extends StatefulWidget {
   final String id;

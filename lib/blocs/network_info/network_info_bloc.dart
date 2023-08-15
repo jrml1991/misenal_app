@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
+
 import 'package:bloc/bloc.dart';
 import 'package:cell_info/CellResponse.dart';
 import 'package:cell_info/cell_info.dart';
@@ -9,19 +9,17 @@ import 'package:cell_info/models/common/cell_type.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:intl/intl.dart';
-import 'package:reactive_forms/reactive_forms.dart';
-import 'package:reactive_image_picker/image_file.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 import 'package:misenal_app/global/environment.dart';
 import 'package:misenal_app/models/models.dart';
 import 'package:misenal_app/services/db_service.dart';
+import 'package:reactive_forms/reactive_forms.dart';
+import 'package:reactive_image_picker/image_file.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:telephony/telephony.dart';
-import 'package:http/http.dart' as http;
 
 part 'network_info_event.dart';
 part 'network_info_state.dart';
@@ -100,6 +98,7 @@ class NetworkInfoBloc extends Bloc<NetworkInfoEvent, NetworkInfoState> {
   Future<void> init({required bool esBackground}) async {
     final info = await actualizarDatos(esBackground: esBackground);
     await enviarDatos();
+    await enviarDatosManuales();
     add(ActualizarNuevaInfoEvent(info: info, actualizado: true));
 
     final activado = await verificarActivado();

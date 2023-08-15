@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:misenal_app/blocs/blocs.dart';
@@ -15,6 +16,7 @@ Future<void> doTask() async {
   //EN INICIALIZACION de NetworkInfoBloc SE LLAMA A ACTUALIZAR / ENVIAR DATOS
   await info.actualizarDatos(esBackground: true);
   await info.enviarDatos();
+  await info.enviarDatosManuales();
 }
 
 void callBackDispatcher() {
